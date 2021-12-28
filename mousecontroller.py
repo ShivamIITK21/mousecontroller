@@ -8,6 +8,8 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands = 1)
 dia = 30
 rad = int(dia/2)
+x_screen_max = pyautogui.size()[0]
+y_screen_max = pyautogui.size()[1]
 
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -33,8 +35,8 @@ with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.
                     elif id==4:       
                         cv2.circle(image,(cx,cy),rad,(255,0,255),cv2.FILLED)
                         ft = (cx,cy)
-                x_scaled = int((1920*f1[0])/640) 
-                y_scaled = int((1080*f1[1])/480)
+                x_scaled = int((x_screen_max*f1[0])/640) 
+                y_scaled = int((y_screen_max*f1[1])/480)
                 xm = pyautogui.position()[0]
                 ym = pyautogui.position()[1]
                 if ([xm,ym] != [x_scaled,y_scaled]):
@@ -49,6 +51,7 @@ with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.
         
         cv2.imshow('WebcamFeed', image)
 
+ 
 
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
