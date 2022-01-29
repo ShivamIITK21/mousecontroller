@@ -14,7 +14,8 @@ y_screen_max = pyautogui.size()[1]
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.7) as hand:
+
+with mp_hands.Hands(min_detection_confidence = 0.5, min_tracking_confidence = 0.5) as hand:
     while cap.isOpened():
         ret, frame = cap.read()
         #this is an issue with my cam, delete next line of code if webcam feed is inverted
@@ -35,8 +36,15 @@ with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.
                     elif id==4:       
                         cv2.circle(image,(cx,cy),rad,(255,0,255),cv2.FILLED)
                         ft = (cx,cy)
-                x_scaled = int((x_screen_max*f1[0])/640) 
-                y_scaled = int((y_screen_max*f1[1])/480)
+                        
+                #finding the midpt of thumb and index
+                xavg=(f1[0]+ft[0])//2
+                yavg=(f1[1]+ft[1])//2
+                #drew a circle to mark the new mouse controller
+                cv2.circle(image,(xavg,yavg),rad,(0,0,255),cv2.FILLED)
+                
+                x_scaled = int((x_screen_max*xavg)/640) 
+                y_scaled = int((y_screen_max*yavg)/480)
                 xm = pyautogui.position()[0]
                 ym = pyautogui.position()[1]
                 if ([xm,ym] != [x_scaled,y_scaled]):
@@ -58,4 +66,5 @@ with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.
             break
 
 cap.release()
-cv2.destroyAllWindows()    
+cv2.destroyAllWindows()   
+
